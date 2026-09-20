@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soodie — My Work</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f5f7fb;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #111827;
+    }
+
+    .wrap {
+      width: min(900px, calc(100% - 32px));
+      margin: 48px auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 14px 40px rgba(15,23,42,.08);
+    }
+
+    h1 { margin-top: 0; }
+
+    .muted { color: #727988; }
+
+    .logout {
+      margin-top: 24px;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 18px;
+      background: #1d73ef;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #loading {
+      padding: 40px;
+      text-align: center;
+      color: #727988;
+    }
+
+    #protectedContent { display: none; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div id="loading">Checking your access...</div>
+
+    <section id="protectedContent" class="card">
+      <h1>My Work</h1>
+      <p class="muted" id="signedInAs"></p>
+
+      <div id="workArea">
+        <p>Your worker content goes here.</p>
+      </div>
+
+      <button class="logout" id="logoutButton">Logout</button>
+    </section>
+  </div>
+
+  <script src="config.js"></script>
+
+  <script>
+    const loading = document.getElementById("loading");
+    const protectedContent = document.getElementById("protectedContent");
+    const signedInAs = document.getElementById("signedInAs");
+    const workArea = document.getElementById("workArea");
+
+    async function checkSession() {
+      const token = localStorage.getItem("worker_session");
+
+      if (!token) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          APP_CONFIG.SUPABASE_URL + "/rest/v1/rpc/check_worker_session",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": APP_CONFIG.SUPABASE_ANON_KEY,
+              "Authorization": "Bearer " + APP_CONFIG.SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({ p_token: token })
+          }
+        );
+
+        if (!response.ok) throw new Error("Session check failed");
+
+        const result = await response.json();
+
+        if (!result.valid) {
+          localStorage.removeItem("worker_session");
+          window.location.href = "index.html";
+          return;
+        }
+
+        signedInAs.textContent = "Signed in as: " + result.email;
+
+        if (result.work_message) {
+          workArea.textContent = result.work_message;
+        }
+
+        loading.style.display = "none";
+        protectedContent.style.display = "block";
+
+      } catch (error) {
+        localStorage.removeItem("worker_session");
+        window.location.href = "index.html";
+      }
+    }
+
+    document.getElementById("logoutButton").addEventListener("click", function () {
+      localStorage.removeItem("worker_session");
+      window.location.href = "index.html";
+    });
+
+    checkSession();
+  </script>
+</body>
+</html>

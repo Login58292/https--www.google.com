@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soodie Sign in</title>
+
+  <style>
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #111827;
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 620px;
+      background: #fff;
+      border-radius: 28px;
+      padding: 52px 58px 48px;
+      box-shadow: 0 16px 45px rgba(15, 23, 42, .08);
+    }
+
+
+    .brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+      font-size: 58px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -3px;
+      user-select: none;
+    }
+
+    .brand span:nth-child(1) { color: #4285F4; }
+    .brand span:nth-child(2) { color: #EA4335; }
+    .brand span:nth-child(3) { color: #FBBC05; }
+    .brand span:nth-child(4) { color: #4285F4; }
+    .brand span:nth-child(5) { color: #34A853; }
+    .brand span:nth-child(6) { color: #EA4335; }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: 52px;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -1.2px;
+    }
+
+    .subtitle {
+      margin: 18px 0 48px;
+      text-align: center;
+      font-size: 23px;
+      color: #8b91a0;
+    }
+
+    .field { margin-bottom: 28px; }
+
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .input-box { position: relative; }
+
+    .left-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      width: 28px;
+      height: 28px;
+      transform: translateY(-50%);
+      color: #8a91a0;
+      pointer-events: none;
+    }
+
+    .left-icon svg,
+    .eye-button svg {
+      width: 28px;
+      height: 28px;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      height: 72px;
+      padding: 0 66px 0 64px;
+      border: 1.5px solid #dfe3e8;
+      border-radius: 17px;
+      background: #fff;
+      color: #222b38;
+      font: inherit;
+      font-size: 21px;
+      outline: none;
+    }
+
+    input::placeholder { color: #949aa7; }
+
+    input:focus {
+      border-color: #2d8cff;
+      box-shadow: 0 0 0 4px rgba(45, 140, 255, .10);
+    }
+
+    .eye-button {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #8a91a0;
+      cursor: pointer;
+    }
+
+    .forgot-row {
+      display: flex;
+      justify-content: flex-end;
+      margin: -6px 0 28px;
+    }
+
+    .forgot-link {
+      color: #2176f3;
+      text-decoration: none;
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .message {
+      display: none;
+      margin: -8px 0 18px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .message.error {
+      display: block;
+      color: #b42318;
+      background: #fff0ee;
+    }
+
+    .message.pending {
+      display: block;
+      color: #8a5b00;
+      background: #fff8e5;
+    }
+
+    .message.success {
+      display: block;
+      color: #137333;
+      background: #e9f7ee;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 62px;
+      border: 0;
+      border-radius: 17px;
+      color: #fff;
+      font-size: 23px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(180deg, #2f9eff 0%, #1d73ef 100%);
+      box-shadow: 0 8px 18px rgba(29,115,239,.18);
+    }
+
+    .login-btn:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .helper {
+      margin: 30px 0 0;
+      text-align: center;
+      color: #7b8190;
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 0; align-items: stretch; }
+
+      .card {
+        max-width: none;
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 44px 24px 36px;
+        box-shadow: none;
+      }
+
+      .brand { font-size: 46px; letter-spacing: -2px; margin-bottom: 20px; }
+
+      h1 { font-size: 40px; }
+
+      .subtitle {
+        font-size: 18px;
+        margin: 14px 0 36px;
+      }
+
+      label {
+        font-size: 17px;
+        margin-bottom: 9px;
+      }
+
+      .field { margin-bottom: 22px; }
+
+      input {
+        height: 60px;
+        border-radius: 14px;
+        font-size: 17px;
+        padding-left: 54px;
+        padding-right: 54px;
+      }
+
+      .left-icon {
+        left: 16px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .left-icon svg,
+      .eye-button svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .eye-button { right: 10px; }
+
+      .forgot-link { font-size: 16px; }
+
+      .login-btn {
+        height: 54px;
+        border-radius: 14px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="card">
+      <div class="brand" aria-label="Soodie">
+        <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
+      </div>
+      <h1>Sign in</h1>
+      <p class="subtitle">Use your account to continue</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+
+          <div class="input-box">
+            <span class="left-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="M4 7l8 6 8-6"></path>
+              </svg>
+            </span>
+
+            <input
+              id="email"
+              type="email"
+              placeholder="Enter your email address"
+              autocomplete="email"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="accessCode">Password</label>
+
+          <div class="input-box">
+            <span class="left-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+              </svg>
+            </span>
+
+            <input
+              id="accessCode"
+              type="password"
+              placeholder="Enter your password"
+              autocomplete="off"
+              required
+            >
+
+            <button id="togglePassword" class="eye-button" type="button" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3l18 18"></path>
+                <path d="M10.6 10.6A2 2 0 0 0 13.4 13.4"></path>
+                <path d="M9.9 5.1A9.6 9.6 0 0 1 12 4c5 0 9 4.5 10 8a12.8 12.8 0 0 1-2.6 4.3"></path>
+                <path d="M6.6 6.6A12.3 12.3 0 0 0 2 12c1 3.5 5 8 10 8a9.5 9.5 0 0 0 4.7-1.2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="forgot-row">
+          <a href="javascript:void(0)" class="forgot-link"
+             onclick="alert('Contact the administrator for a new password.')">
+            Forgot password?
+          </a>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <button id="loginButton" class="login-btn" type="submit">Login</button>
+      </form>
+
+      <p class="helper">Use the password provided by your administrator.</p>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const codeInput = document.getElementById("accessCode");
+    const toggle = document.getElementById("togglePassword");
+    const message = document.getElementById("message");
+    const button = document.getElementById("loginButton");
+
+    toggle.addEventListener("click", function () {
+      const hidden = codeInput.type === "password";
+      codeInput.type = hidden ? "text" : "password";
+      toggle.setAttribute("aria-label", hidden ? "Hide password" : "Show password");
+    });
+
+    function showMessage(type, text) {
+      message.className = "message " + type;
+      message.textContent = text;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const email = emailInput.value.trim().toLowerCase();
+      const accessCode = codeInput.value.trim();
+
+      if (!email || !accessCode) {
+        showMessage("error", "Please enter your email and password.");
+        return;
+      }
+
+      if (!window.APP_CONFIG ||
+          !APP_CONFIG.SUPABASE_URL ||
+          !APP_CONFIG.SUPABASE_ANON_KEY ||
+          APP_CONFIG.SUPABASE_URL.includes("YOUR_")) {
+        showMessage("error", "This login page has not been connected to the server yet.");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Signing in...";
+      message.className = "message";
+      message.textContent = "";
+
+      try {
+        const response = await fetch(
+          APP_CONFIG.SUPABASE_URL + "/rest/v1/rpc/worker_login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": APP_CONFIG.SUPABASE_ANON_KEY,
+              "Authorization": "Bearer " + APP_CONFIG.SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({
+              p_email: email,
+              p_code: accessCode
+            })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Server returned " + response.status);
+        }
+
+        const result = await response.json();
+
+        if (result.status === "approved") {
+          localStorage.setItem("worker_session", result.session_token);
+          window.location.href = "work.html";
+          return;
+        }
+
+        if (result.status === "pending") {
+          showMessage(
+            "pending",
+            "Your access request is pending approval. After the administrator approves it, enter the same email and password again."
+          );
+          return;
+        }
+
+        if (result.status === "blocked" || result.status === "rejected") {
+          showMessage(
+            "error",
+            "Access has not been approved. Please contact the administrator."
+          );
+          return;
+        }
+
+        showMessage("error", "Unable to sign in. Please contact the administrator.");
+
+      } catch (error) {
+        console.error(error);
+        showMessage("error", "Unable to connect to the server. Please try again.");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Login";
+      }
+    });
+  </script>
+</body>
+</html>
