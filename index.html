@@ -92,10 +92,15 @@
       pointer-events: none;
     }
 
-    .left-icon svg,
-    .eye-button svg {
+    .left-icon svg {
       width: 28px;
       height: 28px;
+      display: block;
+    }
+
+    .eye-button svg {
+      width: 26px;
+      height: 26px;
       display: block;
     }
 
@@ -131,7 +136,7 @@
       padding: 0;
       border: 0;
       background: transparent;
-      color: #8a91a0;
+      color: #7d8594;
       cursor: pointer;
     }
 
@@ -545,13 +550,13 @@
               required
             >
 
-            <button id="togglePassword" class="eye-button" type="button" aria-label="Show password">
+            <button id="togglePassword" class="eye-button" type="button" aria-label="Show password" aria-pressed="false">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 3l18 18"></path>
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 4.5L21 19.5"></path>
                 <path d="M10.6 10.6A2 2 0 0 0 13.4 13.4"></path>
-                <path d="M9.9 5.1A9.6 9.6 0 0 1 12 4c5 0 9 4.5 10 8a12.8 12.8 0 0 1-2.6 4.3"></path>
-                <path d="M6.6 6.6A12.3 12.3 0 0 0 2 12c1 3.5 5 8 10 8a9.5 9.5 0 0 0 4.7-1.2"></path>
+                <path d="M9.53 5.11A10.64 10.64 0 0 1 12 4.8c6.2 0 10 7.2 10 7.2a16.12 16.12 0 0 1-2.42 3.28"></path>
+                <path d="M6.08 6.08A15.31 15.31 0 0 0 2 12s3.8 7.2 10 7.2a10.9 10.9 0 0 0 4.39-.92"></path>
               </svg>
             </button>
           </div>
@@ -655,18 +660,18 @@
 
       toggle.innerHTML = showPassword
         ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                aria-hidden="true">
-             <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12"></path>
-             <circle cx="12" cy="12" r="3"></circle>
+             <path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"></path>
+             <circle cx="12" cy="12" r="3.2"></circle>
            </svg>`
         : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                aria-hidden="true">
-             <path d="M3 3l18 18"></path>
+             <path d="M3 4.5L21 19.5"></path>
              <path d="M10.6 10.6A2 2 0 0 0 13.4 13.4"></path>
-             <path d="M9.9 5.1A9.6 9.6 0 0 1 12 4c5 0 9 4.5 10 8a12.8 12.8 0 0 1-2.6 4.3"></path>
-             <path d="M6.6 6.6A12.3 12.3 0 0 0 2 12c1 3.5 5 8 10 8a9.5 9.5 0 0 0 4.7-1.2"></path>
+             <path d="M9.53 5.11A10.64 10.64 0 0 1 12 4.8c6.2 0 10 7.2 10 7.2a16.12 16.12 0 0 1-2.42 3.28"></path>
+             <path d="M6.08 6.08A15.31 15.31 0 0 0 2 12s3.8 7.2 10 7.2a10.9 10.9 0 0 0 4.39-.92"></path>
            </svg>`;
     }
 
