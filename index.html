@@ -1359,6 +1359,85 @@
       }
     }
 
+
+    /* Final access-screen alignment pass. Visual-only. */
+    @media (max-width: 640px) {
+      #accessStep .account-chip {
+        min-height: 40px;
+        padding: 3px 9px 3px 7px;
+        gap: 7px;
+        font-size: 13.8px;
+      }
+
+      #accessStep .account-avatar {
+        width: 27px;
+        height: 27px;
+      }
+
+      #accessStep .account-avatar svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      #accessStep .account-chevron {
+        flex-basis: 10px;
+        width: 10px;
+        height: 10px;
+        margin-right: 0;
+      }
+
+      #accessStep .account-chevron::before {
+        left: 2px;
+        top: 1px;
+        width: 4.5px;
+        height: 4.5px;
+        border-right-width: 1.6px;
+        border-bottom-width: 1.6px;
+      }
+
+      #accessStep .floating-field label {
+        top: -8px;
+        left: 14px;
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      #accessStep .simple-input {
+        height: 50px;
+        font-size: 15px;
+      }
+
+      #accessStep .show-code-row {
+        gap: 9px;
+        margin: 14px 0 31px;
+        font-size: 13px;
+        font-weight: 400;
+        color: #6f7378;
+      }
+
+      #accessStep .show-code-row input {
+        width: 17px;
+        height: 17px;
+      }
+
+      #accessStep .under-link {
+        font-size: 14px;
+      }
+
+      #accessStep .access-info {
+        margin-top: 84px;
+        font-size: 14px;
+        line-height: 1.48;
+      }
+
+      #accessStep .next-btn {
+        min-width: 82px;
+        height: 35px;
+        padding: 0 13px;
+        font-size: 14px;
+      }
+    }
+
   </style>
 </head>
 
