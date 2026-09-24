@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soodie Sign in</title>
 
   <style>
@@ -1535,18 +1535,6 @@
     }
 
 
-    /* Keep the active screen's Next button just above the mobile keyboard. */
-    @media (max-width: 640px) {
-      body.keyboard-active .auth-step.active .next-btn {
-        position: fixed;
-        right: 24px;
-        bottom: calc(var(--keyboard-lift, 0px) + 12px);
-        z-index: 1000;
-        margin: 0;
-        transition: bottom .12s ease;
-      }
-    }
-
   </style>
 </head>
 
@@ -1769,50 +1757,6 @@
     showCode.addEventListener("change", function () {
       codeInput.type = showCode.checked ? "text" : "password";
     });
-
-    const keyboardInputs = [emailInput, codeInput];
-
-    function updateKeyboardLift() {
-      if (!window.visualViewport) {
-        document.documentElement.style.setProperty("--keyboard-lift", "0px");
-        return;
-      }
-
-      const viewport = window.visualViewport;
-      const overlap = Math.max(
-        0,
-        window.innerHeight - viewport.height - viewport.offsetTop
-      );
-
-      document.documentElement.style.setProperty(
-        "--keyboard-lift",
-        Math.round(overlap) + "px"
-      );
-    }
-
-    function enableKeyboardButtonLift() {
-      document.body.classList.add("keyboard-active");
-      updateKeyboardLift();
-    }
-
-    function disableKeyboardButtonLift() {
-      requestAnimationFrame(function () {
-        if (!keyboardInputs.includes(document.activeElement)) {
-          document.body.classList.remove("keyboard-active");
-          document.documentElement.style.setProperty("--keyboard-lift", "0px");
-        }
-      });
-    }
-
-    keyboardInputs.forEach(function (input) {
-      input.addEventListener("focus", enableKeyboardButtonLift);
-      input.addEventListener("blur", disableKeyboardButtonLift);
-    });
-
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", updateKeyboardLift);
-      window.visualViewport.addEventListener("scroll", updateKeyboardLift);
-    }
 
     function serverConfigured() {
       return Boolean(
