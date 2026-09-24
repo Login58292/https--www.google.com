@@ -1535,20 +1535,15 @@
     }
 
 
-    /* Mobile keyboard behavior: keep only Next visible above the keyboard,
-       aligned like the reference on both email and access-code screens. */
+    /* Keep the active screen's Next button just above the mobile keyboard. */
     @media (max-width: 640px) {
       body.keyboard-active .auth-step.active .next-btn {
         position: fixed;
         right: 24px;
-        bottom: calc(var(--keyboard-lift, 0px) + 18px + env(safe-area-inset-bottom, 0px));
+        bottom: calc(var(--keyboard-lift, 0px) + 12px);
         z-index: 1000;
         margin: 0;
-        transition: none;
-      }
-
-      body.keyboard-active #emailStep .secondary-action {
-        visibility: hidden;
+        transition: bottom .12s ease;
       }
     }
 
@@ -1784,16 +1779,10 @@
       }
 
       const viewport = window.visualViewport;
-      const rawOverlap = Math.max(
+      const overlap = Math.max(
         0,
         window.innerHeight - viewport.height - viewport.offsetTop
       );
-
-      // With interactive-widget=resizes-content, the layout viewport already
-      // shrinks above the keyboard, so no extra lift is needed. On browsers
-      // that overlay the keyboard, use the visual viewport overlap.
-      const resizedByKeyboard = Math.abs(window.innerHeight - viewport.height) < 4;
-      const overlap = resizedByKeyboard ? 0 : rawOverlap;
 
       document.documentElement.style.setProperty(
         "--keyboard-lift",
