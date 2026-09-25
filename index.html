@@ -611,6 +611,92 @@
       box-shadow: none;
     }
 
+    /* Email error state — matches the supplied reference without affecting other fields. */
+    .email-field {
+      position: relative;
+    }
+
+    .email-error-label {
+      display: none;
+      position: absolute;
+      z-index: 3;
+      top: -12px;
+      left: 18px;
+      padding: 0 8px;
+      background: #fff;
+      color: #d93025;
+      font-size: 16px;
+      line-height: 22px;
+      font-weight: 400;
+      pointer-events: none;
+    }
+
+    .email-field.has-error .email-error-label {
+      display: block;
+    }
+
+    .email-field.has-error .simple-input,
+    .email-field.has-error .simple-input:focus {
+      border: 2px solid #d93025;
+      box-shadow: none;
+    }
+
+    .email-field.has-error .simple-input::placeholder {
+      color: transparent;
+    }
+
+    .email-error-message {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 0 2px;
+      color: #d93025;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .email-field.has-error .email-error-message {
+      display: flex;
+    }
+
+    .email-error-icon {
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #d93025;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    @media (max-width: 640px) {
+      .email-error-label {
+        top: -10px;
+        left: 14px;
+        padding: 0 6px;
+        font-size: 13.5px;
+        line-height: 19px;
+      }
+
+      .email-error-message {
+        margin-top: 8px;
+        font-size: 13.5px;
+      }
+
+      .email-error-icon {
+        flex-basis: 18px;
+        width: 18px;
+        height: 18px;
+        font-size: 13px;
+      }
+    }
+
     .under-link {
       display: inline-block;
       margin-top: 18px;
@@ -1566,15 +1652,23 @@
           </p>
           <a class="auth-link learn-link" href="javascript:void(0)">Learn more about using your account</a>
 
-          <input
-            id="email"
-            class="simple-input"
-            type="email"
-            placeholder="Email or phone"
-            autocomplete="email"
-            inputmode="email"
-            required
-          >
+          <div id="emailField" class="email-field">
+            <label class="email-error-label" for="email">Email or phone</label>
+            <input
+              id="email"
+              class="simple-input"
+              type="email"
+              placeholder="Email or phone"
+              autocomplete="email"
+              inputmode="email"
+              aria-describedby="emailError"
+              required
+            >
+            <div id="emailError" class="email-error-message" role="alert" aria-live="polite">
+              <span class="email-error-icon" aria-hidden="true">!</span>
+              <span id="emailErrorText">Couldn’t find this account</span>
+            </div>
+          </div>
 
           <a class="auth-link under-link" href="javascript:void(0)">Forgot email?</a>
 
@@ -1695,6 +1789,8 @@
     const emailStep = document.getElementById("emailStep");
     const accessStep = document.getElementById("accessStep");
     const emailInput = document.getElementById("email");
+    const emailField = document.getElementById("emailField");
+    const emailErrorText = document.getElementById("emailErrorText");
     const emailNext = document.getElementById("emailNext");
     const changeEmail = document.getElementById("changeEmail");
     const chosenEmail = document.getElementById("chosenEmail");
@@ -1756,12 +1852,26 @@
       codeInput.focus();
     }
 
+    function clearEmailError() {
+      emailInput.setCustomValidity("");
+      emailInput.removeAttribute("aria-invalid");
+      emailField.classList.remove("has-error");
+    }
+
+    function showEmailError(text) {
+      emailInput.setCustomValidity("");
+      emailInput.setAttribute("aria-invalid", "true");
+      emailErrorText.textContent = text || "Couldn’t find this account";
+      emailField.classList.add("has-error");
+    }
+
     async function checkEmailDomainBeforeContinue() {
       const email = emailInput.value.trim().toLowerCase();
-      emailInput.setCustomValidity("");
+      clearEmailError();
 
       if (!email || !emailInput.checkValidity()) {
-        emailInput.reportValidity();
+        showEmailError("Couldn’t find this account");
+        emailInput.focus();
         return;
       }
 
@@ -1787,22 +1897,23 @@
         const result = await response.json();
 
         if (result.status === "deliverable_domain") {
+          clearEmailError();
           showAccessStep();
           return;
         }
 
         if (result.status === "undeliverable") {
-          emailInput.setCustomValidity("That email domain does not appear able to receive mail.");
-          emailInput.reportValidity();
+          showEmailError("Couldn’t find this account");
+          emailInput.focus();
           return;
         }
 
-        emailInput.setCustomValidity("We couldn’t check the email domain right now. Please try again.");
-        emailInput.reportValidity();
+        showEmailError("We couldn’t check this account. Please try again.");
+        emailInput.focus();
       } catch (error) {
         console.error("Email domain check failed", error);
-        emailInput.setCustomValidity("We couldn’t check the email domain right now. Please try again.");
-        emailInput.reportValidity();
+        showEmailError("We couldn’t check this account. Please try again.");
+        emailInput.focus();
       } finally {
         emailNext.disabled = false;
         emailNext.textContent = originalText;
@@ -1812,7 +1923,7 @@
     emailNext.addEventListener("click", checkEmailDomainBeforeContinue);
 
     emailInput.addEventListener("input", function () {
-      emailInput.setCustomValidity("");
+      clearEmailError();
     });
 
     emailInput.addEventListener("keydown", function (event) {
