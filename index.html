@@ -334,25 +334,58 @@
     .waiting-countdown {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      margin-top: 13px;
-      padding: 6px 11px;
-      border: 1px solid #dce8fb;
-      border-radius: 999px;
-      background: #f4f8ff;
-      color: #245ea8;
-      font-size: 13px;
+      gap: 9px;
+      margin-top: 14px;
+      padding: 7px 9px 7px 11px;
+      border: 1px solid #dbe6f5;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+      color: #40536d;
+      font-size: 12.5px;
       line-height: 1;
-      font-weight: 700;
-      letter-spacing: .1px;
+      font-weight: 600;
+      letter-spacing: .05px;
+      box-shadow: 0 4px 14px rgba(30, 64, 175, .08);
     }
 
-    .waiting-countdown-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #2b74d8;
-      box-shadow: 0 0 0 4px rgba(43, 116, 216, .10);
+    .waiting-countdown-icon {
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: #eaf2ff;
+      color: #1f6fd6;
+      flex: 0 0 auto;
+    }
+
+    .waiting-countdown-icon svg {
+      width: 12px;
+      height: 12px;
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .waiting-countdown-label {
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .waiting-countdown-time {
+      min-width: 42px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: #1f6fd6;
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 800;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      box-shadow: 0 3px 8px rgba(31, 111, 214, .18);
     }
 
     .waiting-cancel {
@@ -1975,8 +2008,14 @@
         </p>
         <p id="waitingStatus" class="waiting-status">Checking approval status automatically…</p>
         <div id="waitingCountdown" class="waiting-countdown" aria-live="polite">
-          <span class="waiting-countdown-dot" aria-hidden="true"></span>
-          <span>Auto-continue in <strong id="waitingCountdownText">15s</strong></span>
+          <span class="waiting-countdown-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="8"></circle>
+              <path d="M12 8v4l2.5 1.5"></path>
+            </svg>
+          </span>
+          <span class="waiting-countdown-label">Auto continue</span>
+          <strong id="waitingCountdownText" class="waiting-countdown-time">30s</strong>
         </div>
         <button id="cancelWaiting" class="waiting-cancel" type="button">Use a different account</button>
       </section>
@@ -2318,7 +2357,7 @@
         clearInterval(waitingCountdownTimer);
         waitingCountdownTimer = null;
       }
-      waitingCountdownText.textContent = "15s";
+      waitingCountdownText.textContent = "30s";
     }
 
     function stopApprovalPolling() {
@@ -2381,11 +2420,11 @@
       }
     }
 
-    function startWaitingCountdown(requestId, seconds = 15, resetWindow = true) {
+    function startWaitingCountdown(requestId, seconds = 30, resetWindow = true) {
       clearWaitingCountdown();
       waitingRequestId = requestId;
 
-      let remaining = Math.max(1, Number(seconds) || 15);
+      let remaining = Math.max(1, Number(seconds) || 30);
       waitingCountdownText.textContent = remaining + "s";
 
       if (resetWindow) {
@@ -2651,7 +2690,7 @@
     function startApprovalPolling(requestId, email) {
       stopApprovalPolling();
       showWaitingState(email);
-      startWaitingCountdown(requestId, 15, true);
+      startWaitingCountdown(requestId, 30, true);
 
       // Check immediately, then every two seconds.
       checkApprovalOnce(requestId);
