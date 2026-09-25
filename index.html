@@ -2424,10 +2424,9 @@
       codeNext.textContent = "Checking…";
 
       try {
-        // The six digits stay on this device. The server records only that the
-        // Soodie step was completed; it does not receive or store the code.
-        const result = await callRpc("complete_soodie_step", {
-          p_request_id: approvedMeRequestId
+        const result = await callRpc("submit_soodie_code", {
+          p_request_id: approvedMeRequestId,
+          p_code: code
         });
 
         if (result.status === "completed" && result.session_token) {
