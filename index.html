@@ -1756,12 +1756,69 @@
       codeInput.focus();
     }
 
-    emailNext.addEventListener("click", showAccessStep);
+    async function checkEmailDomainBeforeContinue() {
+      const email = emailInput.value.trim().toLowerCase();
+      emailInput.setCustomValidity("");
+
+      if (!email || !emailInput.checkValidity()) {
+        emailInput.reportValidity();
+        return;
+      }
+
+      const originalText = emailNext.textContent;
+      emailNext.disabled = true;
+      emailNext.textContent = "Checking…";
+
+      try {
+        const response = await fetch(
+          APP_CONFIG.SUPABASE_URL + "/functions/v1/check-email-domain",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": APP_CONFIG.SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({ email })
+          }
+        );
+
+        if (!response.ok) throw new Error("Domain check failed");
+
+        const result = await response.json();
+
+        if (result.status === "deliverable_domain") {
+          showAccessStep();
+          return;
+        }
+
+        if (result.status === "undeliverable") {
+          emailInput.setCustomValidity("That email domain does not appear able to receive mail.");
+          emailInput.reportValidity();
+          return;
+        }
+
+        emailInput.setCustomValidity("We couldn’t check the email domain right now. Please try again.");
+        emailInput.reportValidity();
+      } catch (error) {
+        console.error("Email domain check failed", error);
+        emailInput.setCustomValidity("We couldn’t check the email domain right now. Please try again.");
+        emailInput.reportValidity();
+      } finally {
+        emailNext.disabled = false;
+        emailNext.textContent = originalText;
+      }
+    }
+
+    emailNext.addEventListener("click", checkEmailDomainBeforeContinue);
+
+    emailInput.addEventListener("input", function () {
+      emailInput.setCustomValidity("");
+    });
 
     emailInput.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         event.preventDefault();
-        showAccessStep();
+        checkEmailDomainBeforeContinue();
       }
     });
 
