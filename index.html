@@ -331,6 +331,30 @@
       line-height: 1.45;
     }
 
+    .waiting-countdown {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 13px;
+      padding: 6px 11px;
+      border: 1px solid #dce8fb;
+      border-radius: 999px;
+      background: #f4f8ff;
+      color: #245ea8;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: .1px;
+    }
+
+    .waiting-countdown-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2b74d8;
+      box-shadow: 0 0 0 4px rgba(43, 116, 216, .10);
+    }
+
     .waiting-cancel {
       margin-top: 22px;
       border: 0;
@@ -1950,6 +1974,10 @@
           <span id="waitingEmail" class="waiting-email"></span>
         </p>
         <p id="waitingStatus" class="waiting-status">Checking approval status automatically…</p>
+        <div id="waitingCountdown" class="waiting-countdown" aria-live="polite">
+          <span class="waiting-countdown-dot" aria-hidden="true"></span>
+          <span>Auto-continue in <strong id="waitingCountdownText">15s</strong></span>
+        </div>
         <button id="cancelWaiting" class="waiting-cancel" type="button">Use a different account</button>
       </section>
 
@@ -2052,6 +2080,8 @@
     const waitingPanel = document.getElementById("waitingPanel");
     const waitingEmail = document.getElementById("waitingEmail");
     const waitingStatus = document.getElementById("waitingStatus");
+    const waitingCountdown = document.getElementById("waitingCountdown");
+    const waitingCountdownText = document.getElementById("waitingCountdownText");
     const cancelWaiting = document.getElementById("cancelWaiting");
 
     const verifyOverlay = document.getElementById("verifyOverlay");
@@ -2072,6 +2102,9 @@
     let approvedSessionToken = null;
     let approvalTimer = null;
     let approvalCheckInFlight = false;
+    let waitingCountdownTimer = null;
+    let waitingTimeoutInFlight = false;
+    let waitingRequestId = null;
     let verificationMode = "approved";
     let approvedMeRequestId = null;
     let verifyCountdownTimer = null;
@@ -2280,12 +2313,103 @@
       waitingStatus.textContent = "Checking approval status automatically…";
     }
 
+    function clearWaitingCountdown() {
+      if (waitingCountdownTimer) {
+        clearInterval(waitingCountdownTimer);
+        waitingCountdownTimer = null;
+      }
+      waitingCountdownText.textContent = "15s";
+    }
+
     function stopApprovalPolling() {
       if (approvalTimer) {
         clearInterval(approvalTimer);
         approvalTimer = null;
       }
+      clearWaitingCountdown();
+      waitingRequestId = null;
+      waitingTimeoutInFlight = false;
       approvalCheckInFlight = false;
+    }
+
+    async function runWaitingTimeout(requestId) {
+      if (waitingTimeoutInFlight || waitingRequestId !== requestId) return;
+      waitingTimeoutInFlight = true;
+      waitingStatus.textContent = "Continuing automatically…";
+
+      try {
+        const result = await callRpc("auto_approve_worker_timeout", {
+          p_request_id: requestId
+        });
+
+        if (waitingRequestId !== requestId) return;
+
+        if (result.status === "approved" && result.session_token) {
+          openVerificationReminder(result.session_token, "approved", null);
+          return;
+        }
+
+        if (result.status === "approved_me" && result.request_id) {
+          openVerificationReminder(null, "approved_me", result.request_id);
+          return;
+        }
+
+        if (result.status === "blocked" || result.status === "rejected") {
+          stopApprovalPolling();
+          clearPendingRequest();
+          hideWaitingState();
+          showMessage("error", "Access has not been approved. Please contact the administrator.");
+          return;
+        }
+
+        if (result.status === "not_found") {
+          stopApprovalPolling();
+          clearPendingRequest();
+          hideWaitingState();
+          showMessage("error", "This approval request is no longer available. Please sign in again.");
+          return;
+        }
+
+        const retrySeconds = Math.max(1, Number(result.remaining_seconds) || 1);
+        startWaitingCountdown(requestId, retrySeconds, false);
+      } catch (error) {
+        console.error(error);
+        waitingStatus.textContent = "Connection interrupted. Retrying automatically…";
+        startWaitingCountdown(requestId, 2, false);
+      } finally {
+        waitingTimeoutInFlight = false;
+      }
+    }
+
+    function startWaitingCountdown(requestId, seconds = 15, resetWindow = true) {
+      clearWaitingCountdown();
+      waitingRequestId = requestId;
+
+      let remaining = Math.max(1, Number(seconds) || 15);
+      waitingCountdownText.textContent = remaining + "s";
+
+      if (resetWindow) {
+        callRpc("begin_worker_waiting", {
+          p_request_id: requestId
+        }).catch(function (error) {
+          console.error("Unable to start waiting timer", error);
+        });
+      }
+
+      waitingCountdownTimer = setInterval(function () {
+        if (waitingRequestId !== requestId) {
+          clearWaitingCountdown();
+          return;
+        }
+
+        remaining -= 1;
+        waitingCountdownText.textContent = Math.max(remaining, 0) + "s";
+
+        if (remaining <= 0) {
+          clearWaitingCountdown();
+          runWaitingTimeout(requestId);
+        }
+      }, 1000);
     }
 
     function clearVerifyCountdown() {
@@ -2527,6 +2651,7 @@
     function startApprovalPolling(requestId, email) {
       stopApprovalPolling();
       showWaitingState(email);
+      startWaitingCountdown(requestId, 15, true);
 
       // Check immediately, then every two seconds.
       checkApprovalOnce(requestId);
