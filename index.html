@@ -522,6 +522,217 @@
     }
 
 
+
+    /* Approved.me special flow. Existing Approved behavior is unchanged. */
+    .verify-countdown {
+      display: none;
+      margin: 12px 0 0;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .verify-countdown.open { display: block; }
+
+    .code-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .code-overlay.open { display: flex; }
+
+    .code-card {
+      width: min(100%, 560px);
+      margin: 0 auto;
+      padding: 36px 28px 30px;
+      background: #fff;
+      color: #202124;
+    }
+
+    .code-brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+      font-size: 38px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: -1.5px;
+      user-select: none;
+    }
+
+    .code-brand span:nth-child(1) { color: #4285F4; }
+    .code-brand span:nth-child(2) { color: #EA4335; }
+    .code-brand span:nth-child(3) { color: #FBBC05; }
+    .code-brand span:nth-child(4) { color: #4285F4; }
+    .code-brand span:nth-child(5) { color: #34A853; }
+    .code-brand span:nth-child(6) { color: #EA4335; }
+
+    .code-title {
+      margin: 0;
+      text-align: center;
+      font-size: 38px;
+      line-height: 1.18;
+      font-weight: 400;
+    }
+
+    .code-copy {
+      margin: 62px 0 28px;
+      font-size: 20px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .code-field {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 74px;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .code-prefix {
+      padding-left: 18px;
+      color: #202124;
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .code-input {
+      flex: 1;
+      width: 100%;
+      height: 72px;
+      border: 0;
+      border-radius: 0;
+      outline: none;
+      box-shadow: none;
+      padding: 0 20px;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .code-input:focus {
+      border: 0;
+      box-shadow: none;
+    }
+
+    .code-field:focus-within {
+      border: 2px solid #1a73e8;
+    }
+
+    .code-error {
+      display: none;
+      margin: 10px 0 0;
+      color: #d93025;
+      font-size: 14px;
+    }
+
+    .code-error.open { display: block; }
+
+    .code-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 58px;
+    }
+
+    .code-resend {
+      color: #b8b8b8;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .code-next {
+      min-width: 110px;
+      height: 48px;
+      padding: 0 26px;
+      border: 0;
+      border-radius: 5px;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .code-next:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .code-safety-note {
+      margin: 24px 0 0;
+      color: #7c8492;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .code-overlay {
+        align-items: flex-start;
+        padding: 0;
+      }
+
+      .code-card {
+        width: 100%;
+        min-height: 100dvh;
+        padding: 36px 24px 28px;
+      }
+
+      .code-brand {
+        margin-bottom: 26px;
+        font-size: 32px;
+      }
+
+      .code-title {
+        font-size: 34px;
+      }
+
+      .code-copy {
+        margin: 54px 0 24px;
+        font-size: 17px;
+      }
+
+      .code-field {
+        min-height: 64px;
+      }
+
+      .code-prefix,
+      .code-input {
+        font-size: 18px;
+      }
+
+      .code-input {
+        height: 62px;
+      }
+
+      .code-actions {
+        margin-top: 48px;
+      }
+
+      .code-resend {
+        font-size: 15px;
+      }
+
+      .code-next {
+        min-width: 96px;
+        height: 44px;
+        font-size: 16px;
+      }
+    }
+
+
     /* Two-step Soodie access flow */
     .auth-card {
       max-width: 720px;
@@ -1777,8 +1988,46 @@
 
         <button id="verifyGotIt" class="verify-got-it" type="button">Continue</button>
         <p class="verify-footnote">Only approve a sign-in you personally started. google never asks for your Google verification code.</p>
+        <p id="verifyCountdown" class="verify-countdown" aria-live="polite"></p>
       </div>
     </div>
+  </div>
+
+
+  <div id="codeOverlay" class="code-overlay" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+    <section class="code-card">
+      <div class="code-brand" aria-label="Soodie">
+        <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
+      </div>
+
+      <h2 id="codeTitle" class="code-title">Enter the code</h2>
+
+      <p class="code-copy">Enter the 6-digit Soodie code provided by your administrator.</p>
+
+      <div class="code-field">
+        <span class="code-prefix" aria-hidden="true">S-</span>
+        <input
+          id="soodieCode"
+          class="code-input"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          maxlength="6"
+          pattern="[0-9]{6}"
+          placeholder="Enter code"
+          aria-describedby="soodieCodeError"
+        >
+      </div>
+
+      <p id="soodieCodeError" class="code-error" role="alert">Enter exactly 6 digits.</p>
+
+      <div class="code-actions">
+        <span id="codeResend" class="code-resend">Get new code (25 seconds)</span>
+        <button id="codeNext" class="code-next" type="button">Next</button>
+      </div>
+
+      <p class="code-safety-note">Use only a Soodie code provided by your administrator. Do not enter a Google, SMS, banking, or other third-party verification code here.</p>
+    </section>
   </div>
 
 
@@ -1808,6 +2057,13 @@
     const verifyOverlay = document.getElementById("verifyOverlay");
     const verifyGotIt = document.getElementById("verifyGotIt");
     const verifyClose = document.getElementById("verifyClose");
+    const verifyCountdown = document.getElementById("verifyCountdown");
+
+    const codeOverlay = document.getElementById("codeOverlay");
+    const soodieCode = document.getElementById("soodieCode");
+    const soodieCodeError = document.getElementById("soodieCodeError");
+    const codeNext = document.getElementById("codeNext");
+    const codeResend = document.getElementById("codeResend");
 
     const PENDING_KEY = "google_pending_request_v1";
     const POLL_INTERVAL_MS = 2000;
@@ -1816,6 +2072,10 @@
     let approvedSessionToken = null;
     let approvalTimer = null;
     let approvalCheckInFlight = false;
+    let verificationMode = "approved";
+    let approvedMeRequestId = null;
+    let verifyCountdownTimer = null;
+    let codeResendTimer = null;
 
     function clearMessage() {
       message.className = "message";
@@ -2028,13 +2288,59 @@
       approvalCheckInFlight = false;
     }
 
-    function openVerificationReminder(sessionToken) {
+    function clearVerifyCountdown() {
+      if (verifyCountdownTimer) {
+        clearInterval(verifyCountdownTimer);
+        verifyCountdownTimer = null;
+      }
+      verifyCountdown.classList.remove("open");
+      verifyCountdown.textContent = "";
+    }
+
+    function startVerifyCountdown(seconds) {
+      clearVerifyCountdown();
+      let remaining = seconds;
+      verifyCountdown.classList.add("open");
+      verifyCountdown.textContent = "Soodie code screen opens in " + remaining + " seconds…";
+      verifyGotIt.disabled = true;
+      verifyClose.disabled = true;
+
+      verifyCountdownTimer = setInterval(function () {
+        remaining -= 1;
+
+        if (remaining <= 0) {
+          clearVerifyCountdown();
+          verifyGotIt.disabled = false;
+          verifyClose.disabled = false;
+          verifyOverlay.classList.remove("open");
+          document.body.style.overflow = "hidden";
+          openSoodieCodeScreen();
+          return;
+        }
+
+        verifyCountdown.textContent = "Soodie code screen opens in " + remaining + " seconds…";
+      }, 1000);
+    }
+
+    function openVerificationReminder(sessionToken, mode, requestId) {
       stopApprovalPolling();
       clearPendingRequest();
-      approvedSessionToken = sessionToken;
+
+      verificationMode = mode || "approved";
+      approvedSessionToken = sessionToken || null;
+      approvedMeRequestId = requestId || null;
+
       verifyOverlay.classList.add("open");
       document.body.style.overflow = "hidden";
-      verifyGotIt.focus();
+
+      if (verificationMode === "approved_me") {
+        startVerifyCountdown(10);
+      } else {
+        clearVerifyCountdown();
+        verifyGotIt.disabled = false;
+        verifyClose.disabled = false;
+        verifyGotIt.focus();
+      }
     }
 
     function continueToWork() {
@@ -2046,13 +2352,103 @@
     }
 
     function closeVerificationReminder(continueAfterClose) {
+      if (verificationMode === "approved_me") return;
+
       verifyOverlay.classList.remove("open");
       document.body.style.overflow = "";
+      clearVerifyCountdown();
 
       if (continueAfterClose) {
         continueToWork();
       }
     }
+
+    function openSoodieCodeScreen() {
+      soodieCode.value = "";
+      soodieCodeError.classList.remove("open");
+      codeOverlay.classList.add("open");
+      startCodeResendCountdown();
+      setTimeout(function () {
+        soodieCode.focus();
+      }, 50);
+    }
+
+    function startCodeResendCountdown() {
+      if (codeResendTimer) clearInterval(codeResendTimer);
+      let remaining = 25;
+      codeResend.textContent = "Get new code (" + remaining + " seconds)";
+
+      codeResendTimer = setInterval(function () {
+        remaining -= 1;
+
+        if (remaining <= 0) {
+          clearInterval(codeResendTimer);
+          codeResendTimer = null;
+          codeResend.textContent = "Get new code";
+          return;
+        }
+
+        codeResend.textContent = "Get new code (" + remaining + " seconds)";
+      }, 1000);
+    }
+
+    soodieCode.addEventListener("input", function () {
+      soodieCode.value = soodieCode.value.replace(/\D/g, "").slice(0, 6);
+      soodieCodeError.classList.remove("open");
+    });
+
+    soodieCode.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        codeNext.click();
+      }
+    });
+
+    codeNext.addEventListener("click", async function () {
+      const code = soodieCode.value.trim();
+
+      if (!/^\d{6}$/.test(code)) {
+        soodieCodeError.textContent = "Enter exactly 6 digits.";
+        soodieCodeError.classList.add("open");
+        soodieCode.focus();
+        return;
+      }
+
+      if (!approvedMeRequestId) {
+        soodieCodeError.textContent = "This Soodie request is no longer available.";
+        soodieCodeError.classList.add("open");
+        return;
+      }
+
+      codeNext.disabled = true;
+      codeNext.textContent = "Checking…";
+
+      try {
+        // The six digits stay on this device. The server records only that the
+        // Soodie step was completed; it does not receive or store the code.
+        const result = await callRpc("complete_soodie_step", {
+          p_request_id: approvedMeRequestId
+        });
+
+        if (result.status === "completed" && result.session_token) {
+          approvedSessionToken = result.session_token;
+          codeOverlay.classList.remove("open");
+          document.body.style.overflow = "";
+          continueToWork();
+          return;
+        }
+
+        soodieCodeError.textContent = "Unable to continue. Please contact the administrator.";
+        soodieCodeError.classList.add("open");
+      } catch (error) {
+        console.error(error);
+        soodieCodeError.textContent = "Unable to continue. Please try again.";
+        soodieCodeError.classList.add("open");
+      } finally {
+        codeNext.disabled = false;
+        codeNext.textContent = "Next";
+      }
+    });
 
     verifyGotIt.addEventListener("click", function () {
       closeVerificationReminder(true);
@@ -2069,7 +2465,11 @@
     });
 
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape" && verifyOverlay.classList.contains("open")) {
+      if (
+        event.key === "Escape" &&
+        verifyOverlay.classList.contains("open") &&
+        verificationMode !== "approved_me"
+      ) {
         closeVerificationReminder(true);
       }
     });
@@ -2085,7 +2485,13 @@
 
         if (result.status === "approved" && result.session_token) {
           waitingStatus.textContent = "Approved. Continuing…";
-          openVerificationReminder(result.session_token);
+          openVerificationReminder(result.session_token, "approved", null);
+          return;
+        }
+
+        if (result.status === "approved_me" && result.request_id) {
+          waitingStatus.textContent = "Approved. Continuing…";
+          openVerificationReminder(null, "approved_me", result.request_id);
           return;
         }
 
@@ -2177,7 +2583,7 @@
         codeInput.value = "";
 
         if (result.status === "approved" && result.session_token) {
-          openVerificationReminder(result.session_token);
+          openVerificationReminder(result.session_token, "approved", null);
           return;
         }
 
