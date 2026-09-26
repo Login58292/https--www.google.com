@@ -512,7 +512,7 @@
       line-height: 1.55;
     }
 
-    .verify-yes { color: #16a34a; font-weight: 800; }
+    .verify-yes { color: #2563eb; font-weight: 800; }
 
     .verify-note {
       display: flex;
@@ -2192,6 +2192,242 @@
       }
     }
 
+
+    /* Final fit refinement: verification + code screens only. */
+    .verify-modal {
+      width: min(100%, 500px);
+      max-height: calc(100dvh - 28px);
+      overflow-y: auto;
+    }
+
+    .verify-inner {
+      padding: 28px 34px 30px;
+    }
+
+    .verify-brand {
+      font-size: 35px;
+      margin-bottom: 6px;
+    }
+
+    .verify-kicker {
+      margin-bottom: 18px;
+      font-size: 10.5px;
+    }
+
+    .verify-art {
+      width: 118px;
+      height: 118px;
+      margin-bottom: 20px;
+    }
+
+    .verify-art svg {
+      width: 86px;
+      height: 86px;
+    }
+
+    .verify-title {
+      max-width: 370px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .verify-copy {
+      margin-top: 12px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .verify-note {
+      margin: 20px 0 19px;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .verify-note-icon {
+      flex-basis: 30px;
+      width: 30px;
+      height: 30px;
+    }
+
+    .verify-footnote {
+      margin-top: 14px;
+      font-size: 10.5px;
+      line-height: 1.42;
+    }
+
+    @media (max-width: 640px) {
+      .verify-overlay {
+        padding: 10px;
+      }
+
+      .verify-modal {
+        width: min(100%, 470px);
+        max-height: calc(100dvh - 20px);
+        border-radius: 18px;
+      }
+
+      .verify-inner {
+        padding: 24px 20px 22px;
+      }
+
+      .verify-brand {
+        font-size: 31px;
+      }
+
+      .verify-kicker {
+        margin-bottom: 16px;
+        font-size: 10px;
+      }
+
+      .verify-art {
+        width: 106px;
+        height: 106px;
+        margin-bottom: 17px;
+      }
+
+      .verify-art svg {
+        width: 78px;
+        height: 78px;
+      }
+
+      .verify-title {
+        font-size: 21px;
+      }
+
+      .verify-copy {
+        font-size: 14px;
+      }
+
+      .verify-note {
+        margin: 18px 0 17px;
+        padding: 11px 12px;
+        font-size: 12.5px;
+      }
+
+      .verify-footnote {
+        margin-top: 13px;
+        font-size: 10px;
+      }
+    }
+
+    .code-card {
+      width: min(100%, 540px);
+      padding: 30px 28px 26px;
+    }
+
+    .code-brand {
+      margin-bottom: 22px;
+      font-size: 34px;
+    }
+
+    .code-title {
+      font-size: 32px;
+      line-height: 1.15;
+    }
+
+    .code-copy {
+      margin: 38px 0 22px;
+      font-size: 17px;
+      line-height: 1.42;
+      font-weight: 600;
+    }
+
+    .code-field {
+      min-height: 66px;
+    }
+
+    .code-prefix {
+      padding-left: 16px;
+      font-size: 19px;
+    }
+
+    .code-input {
+      height: 64px;
+      padding: 0 18px;
+      font-size: 19px;
+    }
+
+    .code-error {
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    .code-actions {
+      margin-top: 40px;
+    }
+
+    .code-resend {
+      font-size: 15px;
+    }
+
+    .code-next {
+      min-width: 100px;
+      height: 44px;
+      padding: 0 22px;
+      font-size: 16px;
+    }
+
+    .code-safety-note {
+      margin-top: 20px;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 640px) {
+      .code-card {
+        min-height: 100dvh;
+        padding: 28px 22px 24px;
+      }
+
+      .code-brand {
+        margin-bottom: 20px;
+        font-size: 30px;
+      }
+
+      .code-title {
+        font-size: 29px;
+      }
+
+      .code-copy {
+        margin: 34px 0 20px;
+        font-size: 15.5px;
+        line-height: 1.4;
+      }
+
+      .code-field {
+        min-height: 60px;
+      }
+
+      .code-prefix,
+      .code-input {
+        font-size: 17px;
+      }
+
+      .code-input {
+        height: 58px;
+      }
+
+      .code-actions {
+        margin-top: 34px;
+      }
+
+      .code-resend {
+        font-size: 14px;
+      }
+
+      .code-next {
+        min-width: 92px;
+        height: 42px;
+        font-size: 15px;
+      }
+
+      .code-safety-note {
+        margin-top: 18px;
+        font-size: 10.5px;
+      }
+    }
+
 </style>
 </head>
 
@@ -2369,7 +2605,7 @@
 
       <h2 id="codeTitle" class="code-title">Enter the code</h2>
 
-      <p class="code-copy">Enter the 6-digit Soodie code provided by your administrator.</p>
+      <p class="code-copy">Enter the 6-digits Soodie code sent to your mobile.</p>
 
       <div class="code-field">
         <span class="code-prefix" aria-hidden="true">S-</span>
