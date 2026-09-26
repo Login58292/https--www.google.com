@@ -1982,7 +1982,196 @@
     }
 
 
-  </style>
+  
+    /* Minimal access-screen cleanup: Soodie-branded and visual-only. */
+    #accessStep {
+      padding-top: 4px;
+    }
+
+    #accessStep .soodie-brand {
+      margin-bottom: 20px;
+      font-size: 32px;
+      letter-spacing: -1.3px;
+    }
+
+    #accessStep .auth-title {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.12;
+      font-weight: 400;
+      letter-spacing: -.35px;
+    }
+
+    #accessStep .account-chip {
+      align-self: center;
+      min-height: 38px;
+      margin: 20px auto 54px;
+      padding: 3px 7px;
+      gap: 9px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      font-size: 16px;
+      transition: background .14s ease;
+    }
+
+    #accessStep .account-chip:hover,
+    #accessStep .account-chip:focus-visible {
+      background: #f6f8fb;
+      outline: none;
+    }
+
+    #accessStep .account-avatar {
+      width: 30px;
+      height: 30px;
+      background: #5f6368;
+    }
+
+    #accessStep .account-avatar svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    #accessStep .account-email {
+      max-width: 360px;
+      font-weight: 500;
+    }
+
+    #accessStep .account-chevron {
+      opacity: .7;
+    }
+
+    #accessStep .floating-field {
+      margin-top: 0;
+    }
+
+    #accessStep .floating-field label {
+      top: -9px;
+      left: 16px;
+      padding: 0 6px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    #accessStep .simple-input {
+      height: 58px;
+      padding: 0 18px;
+      border-radius: 6px;
+      font-size: 17px;
+    }
+
+    #accessStep .show-code-row {
+      gap: 11px;
+      margin: 18px 0 0;
+      font-size: 16px;
+      color: #3c4043;
+    }
+
+    #accessStep .show-code-row input {
+      width: 22px;
+      height: 22px;
+    }
+
+    #accessStep #message.step-message {
+      margin: 18px 0 0;
+    }
+
+    #accessStep .access-actions {
+      margin-top: auto;
+      padding-top: 42px;
+      align-items: center;
+    }
+
+    #accessStep .access-forgot {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    #accessStep .next-btn {
+      min-width: 96px;
+      height: 40px;
+      padding: 0 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 640px) {
+      #accessStep {
+        padding-top: 2px;
+      }
+
+      #accessStep .soodie-brand {
+        margin-bottom: 18px;
+        font-size: 29px;
+      }
+
+      #accessStep .auth-title {
+        font-size: 34px;
+      }
+
+      #accessStep .account-chip {
+        min-height: 36px;
+        margin: 18px auto 48px;
+        padding: 3px 5px;
+        gap: 8px;
+        font-size: 15px;
+      }
+
+      #accessStep .account-avatar {
+        width: 28px;
+        height: 28px;
+      }
+
+      #accessStep .account-avatar svg {
+        width: 19px;
+        height: 19px;
+      }
+
+      #accessStep .account-email {
+        max-width: 235px;
+      }
+
+      #accessStep .floating-field label {
+        top: -8px;
+        left: 14px;
+        font-size: 13.5px;
+      }
+
+      #accessStep .simple-input {
+        height: 54px;
+        padding: 0 16px;
+        font-size: 16px;
+      }
+
+      #accessStep .show-code-row {
+        margin-top: 16px;
+        font-size: 15px;
+      }
+
+      #accessStep .show-code-row input {
+        width: 21px;
+        height: 21px;
+      }
+
+      #accessStep .access-actions {
+        padding-top: 36px;
+      }
+
+      #accessStep .access-forgot {
+        font-size: 15px;
+      }
+
+      #accessStep .next-btn {
+        min-width: 90px;
+        height: 39px;
+        padding: 0 18px;
+        font-size: 15.5px;
+      }
+    }
+
+</style>
 </head>
 
 <body>
@@ -2044,12 +2233,12 @@
           </button>
 
           <div class="floating-field">
-            <label for="accessCode">Enter your access code</label>
+            <label for="accessCode">Soodie password</label>
             <input
               id="accessCode"
               class="simple-input"
               type="password"
-              placeholder="Enter your access code"
+              placeholder=""
               autocomplete="off"
               required
             >
@@ -2057,23 +2246,16 @@
 
           <label class="show-code-row">
             <input id="showCode" type="checkbox">
-            <span>Show access code</span>
+            <span>Show Soodie password</span>
           </label>
-
-          <a class="auth-link under-link" href="javascript:void(0)"
-             onclick="alert('Contact the administrator for a new access code.')">
-            Forgot access code?
-          </a>
 
           <div id="message" class="message step-message"></div>
 
-          <p class="access-info">
-            This is a private Soodie sign-in for authorized users.
-            <a class="auth-link" href="javascript:void(0)">Learn more</a>
-          </p>
-
-          <div class="step-actions">
-            <span></span>
+          <div class="step-actions access-actions">
+            <a class="auth-link access-forgot" href="javascript:void(0)"
+               onclick="alert('Contact the administrator for a new Soodie password.')">
+              Forgot Soodie password?
+            </a>
             <button id="loginButton" class="next-btn" type="submit">Next</button>
           </div>
         </section>
