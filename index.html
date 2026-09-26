@@ -2456,6 +2456,7 @@
     function startWaitingCountdown(requestId, seconds = 30, resetWindow = true) {
       clearWaitingCountdown();
       waitingRequestId = requestId;
+      waitingCountdown.style.display = "inline-flex";
 
       let remaining = Math.max(1, Number(seconds) || 30);
       waitingCountdownText.textContent = remaining + "s";
@@ -2478,8 +2479,9 @@
         waitingCountdownText.textContent = Math.max(remaining, 0) + "s";
 
         if (remaining <= 0) {
-          clearWaitingCountdown();
-          runWaitingTimeout(requestId);
+          clearInterval(waitingCountdownTimer);
+          waitingCountdownTimer = null;
+          waitingCountdown.style.display = "none";
         }
       }, 1000);
     }
