@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>google Sign in</title>
+  <title>Soodie Sign in</title>
 
   <style>
     * { box-sizing: border-box; }
@@ -2436,13 +2436,13 @@
     <section class="card auth-card">
       <form id="loginForm" novalidate>
         <section id="emailStep" class="auth-step active" aria-labelledby="emailStepTitle">
-          <div class="google-brand" aria-label="google">
-            <span>g</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+          <div class="soodie-brand" aria-label="Soodie">
+            <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
           </div>
 
           <h1 id="emailStepTitle" class="auth-title">Sign in</h1>
           <p class="auth-copy">
-            Use your google Account. The account will be added to this device and available to other google apps.
+            Use your Soodie Account. The account will be added to this device and available to other Soodie apps.
           </p>
           <a class="auth-link learn-link" href="javascript:void(0)">Learn more about using your account</a>
 
@@ -2473,8 +2473,8 @@
         </section>
 
         <section id="accessStep" class="auth-step" aria-labelledby="accessStepTitle">
-          <div class="google-brand" aria-label="google">
-            <span>g</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+          <div class="soodie-brand" aria-label="Soodie">
+            <span>S</span><span>o</span><span>o</span><span>d</span><span>i</span><span>e</span>
           </div>
 
           <h1 id="accessStepTitle" class="auth-title">Welcome</h1>
@@ -2490,7 +2490,7 @@
           </button>
 
           <div class="floating-field">
-            <label for="accessCode">Password</label>
+            <label for="accessCode">Passcode</label>
             <input
               id="accessCode"
               class="simple-input"
@@ -2503,7 +2503,7 @@
 
           <label class="show-code-row">
             <input id="showCode" type="checkbox">
-            <span>Show password</span>
+            <span>Show passcode</span>
           </label>
 
           <div id="message" class="message step-message"></div>
@@ -2511,7 +2511,7 @@
           <div class="step-actions access-actions">
             <a class="auth-link access-forgot" href="javascript:void(0)"
                onclick="alert('Contact the administrator for a new passcode.')">
-              Forgot password?
+              Forgot passcode?
             </a>
             <button id="loginButton" class="next-btn" type="submit">Next</button>
           </div>
