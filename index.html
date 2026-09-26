@@ -542,7 +542,7 @@
 
     .verify-got-it {
       width: 100%;
-      height: 46px;
+      height: 42px;
       border: 0;
       border-radius: 12px;
       background: #2563eb;
@@ -564,6 +564,16 @@
     .verify-got-it:active {
       transform: translateY(0);
       box-shadow: 0 6px 14px rgba(37, 99, 235, .18);
+    }
+
+    .verify-got-it:disabled,
+    .verify-got-it:disabled:hover,
+    .verify-got-it:disabled:active {
+      background: #e5e7eb;
+      color: #8b95a5;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .verify-footnote {
@@ -590,8 +600,8 @@
         font-size: 13px;
       }
       .verify-got-it {
-        height: 44px;
-        border-radius: 11px;
+        height: 40px;
+        border-radius: 10px;
         font-size: 14px;
       }
       .verify-footnote {
@@ -602,16 +612,64 @@
 
 
 
-    /* Approved.me special flow. Existing Approved behavior is unchanged. */
+    /* Compact verification countdown used by both approval flows. */
     .verify-countdown {
       display: none;
-      margin: 12px 0 0;
-      color: #64748b;
-      font-size: 13px;
-      font-weight: 600;
+      position: relative;
+      width: 52px;
+      height: 52px;
+      margin: 14px auto 0;
+      place-items: center;
     }
 
-    .verify-countdown.open { display: block; }
+    .verify-countdown.open { display: grid; }
+
+    .verify-countdown svg {
+      position: absolute;
+      inset: 0;
+      width: 52px;
+      height: 52px;
+      transform: rotate(-90deg);
+    }
+
+    .verify-countdown-track {
+      fill: none;
+      stroke: #e7edf5;
+      stroke-width: 4;
+    }
+
+    .verify-countdown-ring {
+      fill: none;
+      stroke: #2563eb;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 119.381;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset .35s linear;
+    }
+
+    .verify-countdown-value {
+      position: relative;
+      z-index: 1;
+      color: #334155;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 640px) {
+      .verify-countdown {
+        width: 50px;
+        height: 50px;
+        margin-top: 13px;
+      }
+
+      .verify-countdown svg {
+        width: 50px;
+        height: 50px;
+      }
+    }
 
     .code-overlay {
       display: none;
@@ -2088,7 +2146,13 @@
 
         <button id="verifyGotIt" class="verify-got-it" type="button">Continue</button>
         <p class="verify-footnote">Only approve a sign-in you personally started. google never asks for your Google verification code.</p>
-        <p id="verifyCountdown" class="verify-countdown" aria-live="polite"></p>
+        <div id="verifyCountdown" class="verify-countdown" aria-live="polite" aria-label="Verification countdown">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <circle class="verify-countdown-track" cx="24" cy="24" r="19"></circle>
+            <circle id="verifyCountdownRing" class="verify-countdown-ring" cx="24" cy="24" r="19"></circle>
+          </svg>
+          <span id="verifyCountdownValue" class="verify-countdown-value">10</span>
+        </div>
       </div>
     </div>
   </div>
@@ -2160,6 +2224,8 @@
     const verifyGotIt = document.getElementById("verifyGotIt");
     const verifyClose = document.getElementById("verifyClose");
     const verifyCountdown = document.getElementById("verifyCountdown");
+    const verifyCountdownRing = document.getElementById("verifyCountdownRing");
+    const verifyCountdownValue = document.getElementById("verifyCountdownValue");
 
     const codeOverlay = document.getElementById("codeOverlay");
     const soodieCode = document.getElementById("soodieCode");
@@ -2492,31 +2558,45 @@
         verifyCountdownTimer = null;
       }
       verifyCountdown.classList.remove("open");
-      verifyCountdown.textContent = "";
+      verifyCountdownValue.textContent = "10";
+      verifyCountdownRing.style.strokeDashoffset = "0";
     }
 
     function startVerifyCountdown(seconds) {
       clearVerifyCountdown();
-      let remaining = seconds;
+
+      const circumference = 2 * Math.PI * 19;
+      const total = Math.max(1, Number(seconds) || 10);
+      let remaining = total;
+
+      verifyCountdownRing.style.strokeDasharray = circumference.toFixed(3);
+      verifyCountdownRing.style.strokeDashoffset = "0";
+      verifyCountdownValue.textContent = remaining;
       verifyCountdown.classList.add("open");
-      verifyCountdown.textContent = "Soodie code screen opens in " + remaining + " seconds…";
+
       verifyGotIt.disabled = true;
-      verifyClose.disabled = true;
 
       verifyCountdownTimer = setInterval(function () {
         remaining -= 1;
 
-        if (remaining <= 0) {
-          clearVerifyCountdown();
-          verifyGotIt.disabled = false;
-          verifyClose.disabled = false;
-          verifyOverlay.classList.remove("open");
-          document.body.style.overflow = "hidden";
-          openSoodieCodeScreen();
-          return;
-        }
+        const safeRemaining = Math.max(remaining, 0);
+        const elapsedRatio = 1 - (safeRemaining / total);
 
-        verifyCountdown.textContent = "Soodie code screen opens in " + remaining + " seconds…";
+        verifyCountdownValue.textContent = safeRemaining;
+        verifyCountdownRing.style.strokeDashoffset = (circumference * elapsedRatio).toFixed(3);
+
+        if (remaining <= 0) {
+          clearInterval(verifyCountdownTimer);
+          verifyCountdownTimer = null;
+          verifyGotIt.disabled = false;
+
+          setTimeout(function () {
+            if (!verifyGotIt.disabled) {
+              verifyCountdown.classList.remove("open");
+              verifyGotIt.focus();
+            }
+          }, 220);
+        }
       }, 1000);
     }
 
@@ -2530,15 +2610,9 @@
 
       verifyOverlay.classList.add("open");
       document.body.style.overflow = "hidden";
+      verifyClose.disabled = false;
 
-      if (verificationMode === "approved_me") {
-        startVerifyCountdown(10);
-      } else {
-        clearVerifyCountdown();
-        verifyGotIt.disabled = false;
-        verifyClose.disabled = false;
-        verifyGotIt.focus();
-      }
+      startVerifyCountdown(10);
     }
 
     function continueToWork() {
@@ -2648,6 +2722,16 @@
     });
 
     verifyGotIt.addEventListener("click", function () {
+      if (verifyGotIt.disabled) return;
+
+      if (verificationMode === "approved_me") {
+        verifyOverlay.classList.remove("open");
+        document.body.style.overflow = "hidden";
+        clearVerifyCountdown();
+        openSoodieCodeScreen();
+        return;
+      }
+
       closeVerificationReminder(true);
     });
 
